@@ -34,4 +34,3 @@ echo "Creating test set for experiment 7 - different font"
 python font_generator.py 100 100 25 25 consolas.ttf A 0 test_diff_directory 
 python font_generator.py 100 100 25 25 consolas.ttf B 0 test_diff_directory 
 python font_generator.py 100 100 25 25 consolas.ttf C 0 test_diff_directory
-python font_generator.py 100 100 25 25 consolas.ttf D 0 test_diff_directory

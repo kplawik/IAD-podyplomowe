@@ -100,9 +100,8 @@ class Network:
                 if out > out_max:
                     out_max = out
                     index = n
-            print('For pattern \"%s\" the recognized pattern is \"%s\"' % (test_set.patterns[k].label, self.neurons[index].label))
-            print('Recognition confidence level is %f' % out_max)
-            print('')
+
+            print('%s \t->\t %s, confidence: %f' % (test_set.patterns[k].label, self.neurons[index].label, out_max))
 
 train = PatternSet('treningowy')
 train.load(train_set_dir)

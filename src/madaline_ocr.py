@@ -101,7 +101,7 @@ class Network:
                     out_max = out
                     index = n
 
-            print('%s \t->\t %s, confidence: %f' % (test_set.patterns[k].label, self.neurons[index].label, out_max))
+            print('%s -> %s, confidence: %f' % (test_set.patterns[k].label, self.neurons[index].label, out_max))
 
 train = PatternSet('treningowy')
 train.load(train_set_dir)

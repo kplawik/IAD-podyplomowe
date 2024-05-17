@@ -8,7 +8,7 @@
 
 \title{{\bf Sprawozdanie}\linebreak
 Inteligentna Analiza Danych}
-\author{Imię i Nazwisko Autora}
+\author{Konrad Pławik}
 \date{data oddania zadania}
 
 \begin{document}
@@ -18,182 +18,160 @@ Inteligentna Analiza Danych}
 \setcounter{page}{1}
 \section{Cel zadania}
 
-Opis celu zadania (proszę nie przepisywać treści instrukcji!).\\
-Sprawozdanie należy wykonać na podstawie\\ 
-szablonu \LaTeX-owego \texttt{sprawozdanie-wzor.tex}.
+Celem zadania było przetestowanie możliwości rozpoznawania znaków graficznych przez sieć neuronową 
+typu MADALINE. W tym celu skorzystaliśmy z sieci napisanej na zajęciach z tą różnicą że predefiniowane znaki zastąpiliśmy możliwościa odczytu ich z plików PNG. Do wygenerowania plików ze znakami skorzystaliśmy ze skryptu napisanego w języku Python i bibliotek PIL oraz OpenCV.\\
 
 \section{Wstęp teoretyczny}
 
-Krótki opis wykorzystywanych metod~\cite{dowolna_etykieta_artykulu}. Proszę nie umieszczać ogólnie znanych z literatury
-wzorów oraz definicji. Należy podać jaka metoda została zastosowana, dlaczego oraz podać wykorzystaną literaturę (korzystając z odwołań do pozycji bibliografii~\cite{dowolna_etykieta_ksiazki}).\\
-Przygotowując bibliografię należy korzystać z podanego\\ 
-szablonu \BibTeX-owego \texttt{bibliografia-wzor.bib}.
+Zbudowana sieć wykorzystywała model neuronu, wzorca, zestawu wzorców oraz model sieci. Model sieci miał zaimplementowane metody treningu oraz testowania. Dodatkowo także utworzenia dodatkowych funkcji i metod pomocniczych, jak np. metody do wyświetlania zawartość zestawów wzorców oraz funkcje do działań na wektorach (iloczyn wektowowy, normalizacja, wyznaczanie długości).\\
+
+\noindent
+W celu prostej automatyzacji stworzony został również skrypt tworzący obrazki z zadanymi literami wybranej czcionki o zadanym rozmiarze i stopniu zaszumienia. W głównym katalogu znajdują się skrypty powłoki bash (create\_trainset.sh oraz create\_testsets.sh) które uruchamiają w/w skrypt i generują zestawy danych: treningowy oraz testowe dla każdego z siedmiu przeprowadzonych eksperymentów. Dla pełniejszej automatyzacji stworzono jeszcze skrypt powłoki uruchamiający testy dla zbiorów testowych (run\_tests.sh).\\
 
 \section{Eksperymenty i wyniki}
 
-Opis wykonywanych eksperymentów. Wymagane jest ilustrowanie przeprowadzanych doświadczeń wykresami oraz tabelami.
+W celu przetestowania stworzonego rozwiązania przeprowadzono siedem eksperymentów dla różnych wariantów zaszumienia, różnych czcionek oraz zestawów kilku znaków. Przebieg i wyniki eksperymentów opisano w kolejnych podrozdziałach.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% PODROZDZIAŁ PT. EKSPERYMENT NR 1 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Test poprawności działania}
+Nim przystąpiłem do wykonywania eksperymentów dokonałem sprawdzenia poprawności działania sieci. W celu tym uruchomiłem skrypt podając dane treningowe również jako dane testowe. Zgodnie z przewidywaniami litery zostały rozpoznane poprawnie ze 100\% pewnością:
+
+\begin{verbatim}
+Network test
+letter A, noise level 0% -> letter A, noise level 0%, confidence: 1.000000
+letter B, noise level 0% -> letter B, noise level 0%, confidence: 1.000000
+letter C, noise level 0% -> letter C, noise level 0%, confidence: 1.000000
+\end{verbatim}
 
 \subsection{Eksperyment nr 1}
 
-Eksperyment nr 1...\\
-Identycznościowa funkcja aktywacji ma postać:
-\begin{equation}
- \forall\: s \in \mathbb{R}\:\:\:\: f(s) = s
- \label{równanie funkcji identycznościowej}
-\end{equation}
-Jak widać z definicji (\ref{równanie funkcji identycznościowej}) funkcja ta...
+Eksperyment nr 1 potraktowałem jako rozgrzewkę. Utworzyłem trzy znaki o różnym stopniu zaszumienia oraz dodałem dwa inne znaki - D oraz X.
 
 \subsubsection{Założenia}
+Zakładam że litery zostaną rozpoznane poprawnie ale poziom pewności będzie proporcjonalny do stopnia zaszumienia. Spodziewam się również że litera D zostanie rozpoznana jako B ze względu na podobieństwo krztałtu. Litera X rozstanie rozpozana jako któraś z testowych ale zapewne z niskim stopniem pewności.
 
 \subsubsection{Przebieg}
-\newpage
+Po wygenerowaniu zadanych danych testowych i uruchomieniu testów otrzynaliśmy następujący listing:
+\begin{verbatim}
+Eksperyment 1
+letter A, noise level 15% -> letter A, noise level 0%, confidence: 0.916784
+letter B, noise level 25% -> letter B, noise level 0%, confidence: 0.851735
+letter C, noise level 50% -> letter C, noise level 0%, confidence: 0.695136
+letter D, noise level 0%  -> letter B, noise level 0%, confidence: 0.981603
+letter X, noise level 0%  -> letter A, noise level 0%, confidence: 0.969461
+\end{verbatim}
 
 \subsubsection{Rezultat}
+Zgodnie z przewidywaniami llitery A,B i C roztały rozpoznane poprawnie a wraz ze wzrostem stopnia zaszumienia stopień pewności malał. Litera D została rozpoznana jako B w dużym stopniem pewności (zapewne ze względu na podobieństwo wyglądu) a litera X jako A (zapewne ze względu na długie skośne krawędzie) ale stopień pewności był nieznacznie niższy niż dla litery D.\\
 
-Rezultaty badań eksperymentalnych przedstawione są w Tab. \ref{wyniki eksperymentu pierwszego}.
-\begin{table}[h!]
- \caption{Rezultaty eksperymentu nr 1}
- \centering
- \vspace{0.2cm}
- \begin{tabular}{c c c c}
-  \hline\hline\\[-0.4cm]
-  \textbf{Przypadek} & \textbf{Metoda 1} & \textbf{Metoda 2} & \textbf{Metoda 3}\\[0.1cm]
-  \hline
-  \textbf{1} & 50 & 837 & 970  \\
-  \textbf{2} & 47 & 877 & 230  \\
-  \textbf{3} & 31 &  25 & 415  \\
-  \textbf{4} & 35 & 144 & 2356 \\
-  \textbf{5} & 45 & 300 & 556  \\ [0.1cm]
-  \hline
- \end{tabular}
- \label{wyniki eksperymentu pierwszego}
-\end{table}
-
-\noindent Jak widać w Tab. \ref{wyniki eksperymentu pierwszego}...\newline
-Graficzna interpretacja wyników z Tab. \ref{wyniki eksperymentu pierwszego} 
-przedstawiona jest na wykresie Rys. \ref{rysunek do eksperymentu pierwszego} gdzie można zauważyć, że...
-\begin{figure}[h!]
- \centering
- \includegraphics[width=9.3cm]{wykres.pdf}
- \vspace{-0.3cm}
- \caption{Wykres dla wyników eksperymentu pierwszego}
- \label{rysunek do eksperymentu pierwszego}
-\end{figure}
-
-\noindent Jak widać z wykresu Rys. \ref{rysunek do eksperymentu pierwszego}...\newline
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% PODROZDZIAŁ PT. EKSPERYMENT NR 2 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\newpage
 \subsection{Eksperyment nr 2}
-
-Eksperyment nr 2 polegał na...\\
-Sigmoidalna funkcja aktywacji ma postać:
-\begin{equation}
- \forall\: s \in \mathbb{R}\:\:\:\:\:\: f(s) = \frac{1}{\:\:\:1 + e^{-\beta \cdot s}\:}\:,
- \:\:\:\:\textnormal{gdzie}\:\:\beta \in \mathbb{R}_{+}
- \label{równanie funkcji sigmoidalnej}
-\end{equation}
-Jak widać z równania definicyjnego (\ref{równanie funkcji sigmoidalnej}) 
-funkcja\footnote{ang. \textit{sigmoidal function} lub \textit{unipolar function}}
-ta ma wykres przedstawiony 
-na rysunku Rys. \ref{funkcja sigmoidalna}, gdzie paramater $\beta$ ...
-\begin{figure}[h!]
- \centering
- \includegraphics[width=7.3cm]{funkcja.png}
- \vspace{-0.1cm}
- \caption{Wykres funkcji sigmoidalnej}
- \label{funkcja sigmoidalna}
-\end{figure}
+Zgodnie z treścią zadanie ekperyment wykorzystał zaszumienie 10\%. Literę D roztawiłem ale X usunąłem ze względu na niski stopień pewności.
 
 \subsubsection{Założenia}
+Spodziewam się poprawnego rozpoznania liter A, B i C i stopnia pewności powyżej 90\%.\\
 
 \subsubsection{Przebieg}
+Po wygenerowaniu zadanych danych testowych i uruchomieniu testów otrzynaliśmy następujący listing:
+\begin{verbatim}
+Eksperyment 2
+letter A, noise level 10% -> letter A, noise level 0%, confidence: 0.947077
+letter B, noise level 10% -> letter B, noise level 0%, confidence: 0.945833
+letter C, noise level 10% -> letter C, noise level 0%, confidence: 0.947273
+letter D, noise level 10% -> letter B, noise level 0%, confidence: 0.930001
+\end{verbatim}
 
 \subsubsection{Rezultat}
+Zgodnie z przewidywaniami llitery A,B i C roztały rozpoznane poprawnie a stopień pewności oscylował w granicach 94\%. Litera D tak jak ostatnio - stopień pewności niższy od B. Analiza wzrokowa obrazów testowych wykazała lekkie zaszumienie a litery czytelne bez majmniejszego prablemu.\\
 
-Rezultaty badań eksperymentalnych przedstawione są w Tab. \ref{wyniki eksperymentu drugiego}.
-\vspace{-0.5cm}
-\begin{table}[h!]
- \caption{Rezultaty eksperymentu nr 2}
- \centering
- \vspace{0.2cm}
- \begin{tabular}{c c c }
-  \hline\hline\\[-0.4cm]
-  \textbf{Przypadek} & \textbf{Metoda 1} & \textbf{Metoda 2}\\[0.1cm]
-  \hline
-  \textbf{1} & 50 & 837 \\
-  \textbf{2} & 47 & 877 \\
-  \textbf{3} & 45 & 300 \\ [0.1cm]
-  \hline
- \end{tabular}
- \label{wyniki eksperymentu drugiego}
-\end{table}
+\subsection{Eksperyment nr 3}
+Zgodnie z treścią zadanie ekperyment wykorzystał zaszumienie 30\%.
+\subsubsection{Założenia}
+Litery A, B i C zostaną rozpoznane poprawnie z dokładnością ok. 75\%. Litera D minimalnie niżej.
+\subsubsection{Przebieg}
+Po wygenerowaniu zadanych danych testowych i uruchomieniu testów otrzynaliśmy następujący listing:
+\begin{verbatim}
+Eksperyment 3
+letter A, noise level 30% -> letter A, noise level 0%, confidence: 0.825020
+letter B, noise level 30% -> letter B, noise level 0%, confidence: 0.820656
+letter C, noise level 30% -> letter C, noise level 0%, confidence: 0.825726
+letter D, noise level 30% -> letter C, noise level 0%, confidence: 0.810182
+\end{verbatim}
 
-\noindent Jak widać w Tab. \ref{wyniki eksperymentu drugiego}...\newline
-Wyniki w Tab. \ref{wyniki eksperymentu drugiego} świadczą o tym, że...
+\subsubsection{Rezultat}
+Litery A, B i C rozpoznane poprawnie z dokładnością nieco wyższą niż się spodziewałem (ta oscylowała w ok. 82\%). Litera D rozpoznana jako C z dokładnością 81\% czyli pozostawienie jej w kolejnych iteracja jest już tylko ciekawostką. Wygenerowane pliki graficzne czytelne dla ludzkiego oka choć szum wyraźnie je utrudniał.\\
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% PODROZDZIAŁ PT. EKSPERYMENT NR N 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Eksperyment nr 4}
+Ekperyment wykorzystał zaszumienie 50\%.
+\subsubsection{Założenia}
+Zakładam poziom rozpoznania w granicach 50\%.
+\subsubsection{Przebieg}
+Po wygenerowaniu zadanych danych testowych i uruchomieniu testów otrzynaliśmy następujący listing:
+\begin{verbatim}
+Eksperyment 4
+letter A, noise level 50% -> letter A, noise level 0%, confidence: 0.693884
+letter B, noise level 50% -> letter A, noise level 0%, confidence: 0.691056
+letter C, noise level 50% -> letter C, noise level 0%, confidence: 0.695136
+letter D, noise level 50% -> letter C, noise level 0%, confidence: 0.691716
+\end{verbatim}
+\subsubsection{Rezultat}
+Podany poziom wynosił 69\%. z tym że litera B nie została rozpoznana poprawnie (jako A). Litera D jako C (czyli jak w poprzednim przypadku). Wygenerowane pliki graficzne praktycznie nieczytelne dla ludzkiego oka.
 
-\subsection{Eksperyment nr n}
-Eksperyment nr n zakładał, iż...\\
-Dla dowolnej liczby $N \in \mathbb{N}$ funkcję 
-$F_{N}:\mathbb{C}^{\:N}\!\rightarrow\mathbb{C}^{\:N}$
-zdefiniowaną w następujący sposób:
-\vspace{-0.4cm}
-\begin{equation}
- \forall\:\mathbf{x} \in \mathbb{C}^{\:N}\:\:\:\:\:
- \forall\:k \in \{\:0,\dots,N - 1\:\!\}\:\:\:\:\:
- F_{N}\:\!(\:\mathbf{x}\:)_{k}\:\stackrel{\Delta}{=}\:
- \frac{1}{\sqrt{N}}\:
- \sum_{n = 0}^{N - 1}\:x_{n}\:\cdot\:
- e^{-j 2 \pi n k / N}
- \label{równanie dyskretnej transformaty Fouriera}
-\end{equation}
-nazywamy $N$ -- punktowym prostym jednowymiarowym dyskretnym przekształceniem Fouriera.
-Na Rys. \ref{FFT} przedstawiono szybki algorytm obliczania dyskretnego 
-przekształcenia Fouriera\footnote{ang. \textit{Fast Fourier Transform}}.
-\begin{figure}[h!]
- \centering
- \includegraphics[width=0.8\linewidth]{transformata.pdf}
- \vspace{-0.1cm}
- \caption{Szybkie przekształcenie Fouriera}
- \label{FFT}
-\end{figure}
+\subsection{Eksperyment nr 5}
+Ekperyment wykorzystał zaszumienie 90\%.
+\subsubsection{Założenia}
+Spodziewam się niepoprawności z rozpoznaniu i niskich wskazań pewności (pewnie ok. 50\%).
+\subsubsection{Przebieg}
+Po wygenerowaniu zadanych danych testowych i uruchomieniu testów otrzynaliśmy następujący listing:
+\begin{verbatim}
+Eksperyment 5
+letter A, noise level 90% -> letter C, noise level 0%, confidence: 0.345270
+letter B, noise level 90% -> letter A, noise level 0%, confidence: 0.335060
+letter C, noise level 90% -> letter A, noise level 0%, confidence: 0.340770
+letter D, noise level 90% -> letter A, noise level 0%, confidence: 0.353479
+\end{verbatim}
+\subsubsection{Rezultat}
+Żadna z liter nie rozpozanana poprawnie. Podane współczynniki pewności ok 35\%. Naaoczne oględziny wygenerowanych plików pokazują że są już one prawie negatywami liter treningowych.
+
+\subsection{Eksperyment nr 6}
+Eksperyment dodatkowy sprawdzający jak sieć poradzi sobie z zestawami liter - jak np. Ai albo Bo.
 
 \subsubsection{Założenia}
+Ze względu brak zmienionej centryzacji spodziewam się dosyć dużej rozpoznawalności bo dodatkowe litery będą umieszczone obok zadanych (tożsamym z treningowymi).
 
 \subsubsection{Przebieg}
-
+Po wygenerowaniu zadanych danych testowych i uruchomieniu testów otrzynaliśmy następujący listing:
+\begin{verbatim}
+Eksperyment 6
+letter Ai, noise level 0% -> letter A, noise level 0%, confidence: 0.989587
+letter Bo, noise level 0% -> letter B, noise level 0%, confidence: 0.982996
+letter Cy, noise level 0% -> letter C, noise level 0%, confidence: 0.983019
+letter DT, noise level 0% -> letter B, noise level 0%, confidence: 0.961837
+\end{verbatim}
 \subsubsection{Rezultat}
-\newpage
+Zgodnie z założeniami - dodatkowe litery stały obok wzorcowych dzięki czemu sieć prawidłowo rozpoznała litery dominujące (A, B, C) a dodatkowe (i, o, y, T) stanowiły jedynie "szum" dla stopnia pewności, ktory wynosił 96-98\%.\\
 
+\subsection{Eksperyment nr 7}
+Tym razem dane testowe wygenerowane zostały z użyniem czcionki consolas.ttf (poprzednie times.ttf).
+\subsubsection{Założenia}
+Spodziewam się błedów i dużego spadku pewności rozpozania.
+\subsubsection{Przebieg}
+Po wygenerowaniu zadanych danych testowych i uruchomieniu testów otrzynaliśmy następujący listing:
+\begin{verbatim}
+Eksperyment 7
+letter A, noise level 0% -> letter A, noise level 0%, confidence: 0.967252
+letter B, noise level 0% -> letter C, noise level 0%, confidence: 0.960595
+letter C, noise level 0% -> letter C, noise level 0%, confidence: 0.968028
+\end{verbatim}
+\subsubsection{Rezultat}
+Dwie litery rozpoznane poprawnie - A i C. B błednie rozpoznana jako C z zastanawiająco wysokim stopniem dokładności - 96\%.
 \section{Wnioski}
 
 Wnioski z przeprowadzonych eksperymentów dowodzą, że...
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% PODROZDZIAŁ PT. ZALACZNIKI
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 \section{Załączniki*}
 
 Opcjonalnie, w zależności od zadania,
 np. fragment kodu źródłowego.
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% BIBLIOGRAFIA
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \renewcommand\refname{Bibliografia}
 \bibliographystyle{plain}

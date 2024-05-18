@@ -2,6 +2,9 @@
 \usepackage[T1]{polski}
 \usepackage{graphicx}
 \usepackage{amsfonts}
+\usepackage{hyperref}
+
+\graphicspath{ {./images/} }
 
 \setlength{\textheight}{21cm}
 \newcommand{\BibTeX}{{\sc Bib}\TeX}
@@ -9,7 +12,8 @@
 \title{{\bf Sprawozdanie}\linebreak
 Inteligentna Analiza Danych}
 \author{Konrad Pławik}
-\date{data oddania zadania}
+\date{data oddania zadania: 18 maja 2024}
+
 
 \begin{document}
 \clearpage\maketitle
@@ -23,10 +27,15 @@ typu MADALINE. W tym celu skorzystaliśmy z sieci napisanej na zajęciach z tą 
 
 \section{Wstęp teoretyczny}
 
-Zbudowana sieć wykorzystywała model neuronu, wzorca, zestawu wzorców oraz model sieci. Model sieci miał zaimplementowane metody treningu oraz testowania. Dodatkowo także utworzenia dodatkowych funkcji i metod pomocniczych, jak np. metody do wyświetlania zawartość zestawów wzorców oraz funkcje do działań na wektorach (iloczyn wektowowy, normalizacja, wyznaczanie długości).\\
+Zbudowana sieć wykorzystywała model neuronu, wzorca, zestawu wzorców oraz model sieci. Model sieci miał zaimplementowane metody treningu oraz testowania. Dodatkowo także utworzenia dodatkowych funkcji i metod pomocniczych, jak np. metody do wyświetlania zawartość zestawów wzorców oraz funkcje do działań na wektorach (iloczyn wektorowy, normalizacja, wyznaczanie długości).\\
 
 \noindent
 W celu prostej automatyzacji stworzony został również skrypt tworzący obrazki z zadanymi literami wybranej czcionki o zadanym rozmiarze i stopniu zaszumienia. W głównym katalogu znajdują się skrypty powłoki bash (create\_trainset.sh oraz create\_testsets.sh) które uruchamiają w/w skrypt i generują zestawy danych: treningowy oraz testowe dla każdego z siedmiu przeprowadzonych eksperymentów. Dla pełniejszej automatyzacji stworzono jeszcze skrypt powłoki uruchamiający testy dla zbiorów testowych (run\_tests.sh).\\
+
+\noindent
+Pełny kod źródłowy, skrypty oraz pliki LaTeX sprawozdania znajdują się na repozytorium GitHub pod adresem: \\
+
+\url{https://github.com/kplawik/IAD-podyplomowe}
 
 \section{Eksperymenty i wyniki}
 
@@ -68,6 +77,12 @@ Zgodnie z treścią zadanie ekperyment wykorzystał zaszumienie 10\%. Literę D 
 
 \subsubsection{Założenia}
 Spodziewam się poprawnego rozpoznania liter A, B i C i stopnia pewności powyżej 90\%.\\
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.25\textwidth]{A_10.png}
+    \caption{Litera A ze stopniem zaszumienia 10\%.}
+    \label{fig:A_10}
+\end{figure}
 
 \subsubsection{Przebieg}
 Po wygenerowaniu zadanych danych testowych i uruchomieniu testów otrzynaliśmy następujący listing:
@@ -86,6 +101,12 @@ Zgodnie z przewidywaniami llitery A,B i C roztały rozpoznane poprawnie a stopie
 Zgodnie z treścią zadanie ekperyment wykorzystał zaszumienie 30\%.
 \subsubsection{Założenia}
 Litery A, B i C zostaną rozpoznane poprawnie z dokładnością ok. 75\%. Litera D minimalnie niżej.
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.25\textwidth]{A_30.png}
+    \caption{Litera A ze stopniem zaszumienia 30\%.}
+    \label{fig:A_30}
+\end{figure}
 \subsubsection{Przebieg}
 Po wygenerowaniu zadanych danych testowych i uruchomieniu testów otrzynaliśmy następujący listing:
 \begin{verbatim}
@@ -103,6 +124,12 @@ Litery A, B i C rozpoznane poprawnie z dokładnością nieco wyższą niż się 
 Ekperyment wykorzystał zaszumienie 50\%.
 \subsubsection{Założenia}
 Zakładam poziom rozpoznania w granicach 50\%.
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.25\textwidth]{A_50.png}
+    \caption{Litera A ze stopniem zaszumienia 50\%.}
+    \label{fig:A_50}
+\end{figure}
 \subsubsection{Przebieg}
 Po wygenerowaniu zadanych danych testowych i uruchomieniu testów otrzynaliśmy następujący listing:
 \begin{verbatim}
@@ -119,6 +146,12 @@ Podany poziom wynosił 69\%. z tym że litera B nie została rozpoznana poprawni
 Ekperyment wykorzystał zaszumienie 90\%.
 \subsubsection{Założenia}
 Spodziewam się niepoprawności z rozpoznaniu i niskich wskazań pewności (pewnie ok. 50\%).
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.25\textwidth]{A_90.png}
+    \caption{Litera A ze stopniem zaszumienia 90\%.}
+    \label{fig:A_90}
+\end{figure}
 \subsubsection{Przebieg}
 Po wygenerowaniu zadanych danych testowych i uruchomieniu testów otrzynaliśmy następujący listing:
 \begin{verbatim}
@@ -136,7 +169,12 @@ Eksperyment dodatkowy sprawdzający jak sieć poradzi sobie z zestawami liter - 
 
 \subsubsection{Założenia}
 Ze względu brak zmienionej centryzacji spodziewam się dosyć dużej rozpoznawalności bo dodatkowe litery będą umieszczone obok zadanych (tożsamym z treningowymi).
-
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.25\textwidth]{Ai.png}
+    \caption{Litery A oraz i.}
+    \label{fig:Ai}
+\end{figure}
 \subsubsection{Przebieg}
 Po wygenerowaniu zadanych danych testowych i uruchomieniu testów otrzynaliśmy następujący listing:
 \begin{verbatim}
@@ -153,6 +191,12 @@ Zgodnie z założeniami - dodatkowe litery stały obok wzorcowych dzięki czemu 
 Tym razem dane testowe wygenerowane zostały z użyniem czcionki consolas.ttf (poprzednie times.ttf).
 \subsubsection{Założenia}
 Spodziewam się błedów i dużego spadku pewności rozpozania.
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.25\textwidth]{A_diff.png}
+    \caption{Litera A: po lewej treningowa, po prawe testowa pisana inną czcionką}
+    \label{fig:A_diff}
+\end{figure}
 \subsubsection{Przebieg}
 Po wygenerowaniu zadanych danych testowych i uruchomieniu testów otrzynaliśmy następujący listing:
 \begin{verbatim}
@@ -165,13 +209,15 @@ letter C, noise level 0% -> letter C, noise level 0%, confidence: 0.968028
 Dwie litery rozpoznane poprawnie - A i C. B błednie rozpoznana jako C z zastanawiająco wysokim stopniem dokładności - 96\%.
 \section{Wnioski}
 
-Wnioski z przeprowadzonych eksperymentów dowodzą, że...
+Wnioski z przeprowadzonych eksperymentów dowodzą, że:
 
+\begin{enumerate}
+  \item Wraz ze wzrostem zaszumienia maleje zarówno prawidłowość klasyfikacji jak i stopień podobieństwa (confidence)
+  \item Wysoki stopień podobieństwa (confidence) nie musi być gwarancją poprawnej klasyfikacji testowanego znaku
+  \item 30\% zaszumienia wydaje się być umowną graniczą dla której sieć MADALINE jest w stanie poprawnie rozpoznawać znaki. Mowa tu oczywiście na analizowanym przypadku, poniewać dla innych czcionek, znaków czy metod wprowadzania szumu granica ta może być inna.
+  \item Przy niewielkim zaszumieniu klasyfikacja przebiega poprawnie z wysokim stopniem podobieństwa.
 
-\section{Załączniki*}
-
-Opcjonalnie, w zależności od zadania,
-np. fragment kodu źródłowego.
+\end{enumerate}
 
 \renewcommand\refname{Bibliografia}
 \bibliographystyle{plain}
